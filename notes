@@ -1,0 +1,7 @@
+i want to create a programme that takes in data from python and stores the data in my local sql data base
+
+- I pip installed th following packages
+- mysql-connector-python
+- mysql.connector
+- pandas
+- os
