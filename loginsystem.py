@@ -3,6 +3,7 @@ import mysql.connector
 import os
 import sqlite3
 from dotenv import load_dotenv
+
 load_dotenv()
 
 
@@ -15,13 +16,13 @@ Thanks''')
 def login_access():
     user = int(input('Press 1 if you are a new user and 2 for an old user:'))
     if user == 1:
-        store_data()
+        store_user_input()
     elif user == 2:
         print('Enter your user name and password to proceed')
 
 
 # create connection object to the sql local database
-
+# use the dotenv method to hide important information
 connection = mysql.connector.connect(host=os.getenv("HOST"),
                                      user=os.getenv("USERNAME"),
                                      password=os.getenv("PSWD"),
@@ -47,6 +48,7 @@ mycursor = connection.cursor()
 sql = '''INSERT INTO user (user_name,password,fullname,year_of_birth,department,gender)
          VALUES (%s,%s,%s,%s,%s,%s)'''
 
+
 # takes is the user inputs
 def data_input():
     data = ()
@@ -65,4 +67,8 @@ def store_user_input():
     mycursor.execute(sql, data_input())
     connection.commit()
 
-store_user_input()
+def login_page():
+    welcome()
+    login_access()
+
+
