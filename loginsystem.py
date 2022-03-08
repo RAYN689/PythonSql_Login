@@ -1,3 +1,4 @@
+# import libraries needed
 import pandas as pd
 import mysql.connector
 import os
@@ -32,18 +33,22 @@ connection = mysql.connector.connect(host=os.getenv("HOST"),
 # create a cursor object
 mycursor = connection.cursor()
 
+
 # create a database called Loginportal and table user
 # mycursor.execute('CREATE DATABASE Loginportal')
 # create user table and insert columns into it
-# mycursor.execute('''CREATE TABLE user (
-#                     user_id INTEGER AUTO_INCREMENT PRIMARY KEY,
-#                     user_name VARCHAR(50),
-#                     password VARCHAR(20),
-#                     username VARCHAR(30),
-#                     year_of_birth INTEGER,
-#                     department VARCHAR(20),
-#                     gender VARCHAR(15)
-#                     )''')
+def create_table():
+    mycursor.execute('''CREATE TABLE user (
+                        user_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+                        user_name VARCHAR(50),
+                        password VARCHAR(20),
+                        username VARCHAR(30),
+                        year_of_birth INTEGER,
+                        department VARCHAR(20),
+                        gender VARCHAR(15)
+                    )''')
+
+
 # sql query that inserts values into the database
 sql = '''INSERT INTO user (user_name,password,fullname,year_of_birth,department,gender)
          VALUES (%s,%s,%s,%s,%s,%s)'''
@@ -52,9 +57,9 @@ sql = '''INSERT INTO user (user_name,password,fullname,year_of_birth,department,
 # takes is the user inputs
 def data_input():
     data = ()
-    username = input("Please enter your username: ")
-    password = input("Please enter your password: ")
-    fullname = input("Please enter your fullname: ")
+    username = str(input("Please enter your username: "))
+    password = str(input("Please enter your password: "))
+    fullname = str(input("Please enter your fullname: "))
     year_of_birth = int(input("Please enter your year of birth: "))
     department = str(input("Please enter your department: "))
     gender = str(input("Please enter your gender: "))
@@ -67,8 +72,27 @@ def store_user_input():
     mycursor.execute(sql, data_input())
     connection.commit()
 
+
+# function allows new or registered users to login
 def login_page():
     welcome()
     login_access()
+
+
+# login_page()
+
+sql_select = '''
+                DECLARE @user_input VARCHAR;
+                SET @user_input = 2;
+                SELECT user_name, department,year_of_birth, password
+                FROM user
+                WHERE user_name= @user_input;
+            '''
+mycursor = connection.cursor()
+myresult1 = mycursor.execute(sql_select, multi=True)
+myresult1 = mycursor.fetchall()
+for data in myresult1:
+    print(data)
+
 
 
