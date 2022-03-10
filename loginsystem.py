@@ -79,20 +79,29 @@ def login_page():
     login_access()
 
 
-# login_page()
-
+# using a parameterised query to store variable in sql
 sql_select = '''
-                DECLARE @user_input VARCHAR;
-                SET @user_input = 2;
-                SELECT user_name, department,year_of_birth, password
-                FROM user
-                WHERE user_name= @user_input;
+                SELECT user_name, password
+                FROM Loginportal.user
+                WHERE user_name= %s
+                AND password= %s
             '''
+
+username = str(input('Please enter your username:'))
+password = str(input('Please enter your password:'))
+
 mycursor = connection.cursor()
-myresult1 = mycursor.execute(sql_select, multi=True)
-myresult1 = mycursor.fetchall()
-for data in myresult1:
-    print(data)
+result = mycursor.execute(sql_select, (username, password,))
+result = mycursor.fetchall()
 
+# converts the result set from a list to a tuple
+result_tuple = tuple(result)
 
+# access the elements of the result and assign it to a variable
+db_username = result_tuple[0][0]
+db_password = result_tuple[0][1]
 
+print(db_username)
+print(db_password)
+
+# df = pd.read_sql(result, connection, encoding='unicode_escape')
