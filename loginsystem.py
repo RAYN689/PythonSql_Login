@@ -81,7 +81,7 @@ def login_page():
 
 # using a parameterised query to store variable in sql
 sql_select = '''
-                SELECT user_name, password
+                SELECT user_name, password, fullname
                 FROM Loginportal.user
                 WHERE user_name= %s
                 AND password= %s
@@ -96,12 +96,21 @@ result = mycursor.fetchall()
 
 # converts the result set from a list to a tuple
 result_tuple = tuple(result)
+print(result_tuple)
+print(type(result_tuple))
+
 
 # access the elements of the result and assign it to a variable
-db_username = result_tuple[0][0]
-db_password = result_tuple[0][1]
+def split_result():
+    db_username = result_tuple[0][0]
+    db_password = result_tuple[0][1]
+    if username == db_username and password == db_password:
+        print('Login Successful!' '\n'
+              'Welcome' '!')
 
-print(db_username)
-print(db_password)
 
-# df = pd.read_sql(result, connection, encoding='unicode_escape')
+if result_tuple == ():
+    print('login unsuccessful')
+else:
+    split_result()
+# # df = pd.read_sql(result, connection, encoding='unicode_escape')
